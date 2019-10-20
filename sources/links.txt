@@ -1,0 +1,3 @@
+https://www.luisllamas.es/arduino-wifi-esp8266-esp01/
+https://www.prometec.net/esp8266-pluggin-arduino-ide/
+https://www.aprendiendoarduino.com/category/esp8266/
