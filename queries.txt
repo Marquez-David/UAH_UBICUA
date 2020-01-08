@@ -1,0 +1,31 @@
+
+Creo la base de datos con nombre Ubicua, usuario Ubicua, y contraseña UbicuaBBDD
+
+CREATE TABLE usuario (
+    token Varchar(100) PRIMARY KEY,
+    usuario Varchar(20),
+    contrasena Varchar(20)
+);
+
+CREATE TABLE datos (
+    serial INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    timestamp Varchar(20),
+    temp_corporal Varchar(20),
+    ppm Varchar(20),
+    temp_habita Varchar(20),
+    humedad Varchar(20),
+    token_usuario Varchar(100),
+    PRIMARY KEY (serial),
+    FOREIGN KEY (token_usuario) references usuario(token) ON DELETE CASCADE
+);
+
+CREATE TABLE alertas (
+    serial INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    timestamp Varchar(20),
+    tipo Varchar(20),
+    nombre Varchar(20),
+    valor Varchar(20),
+    PRIMARY KEY (serial)
+);
+
+INSERT INTO usuario VALUES ('ABCD', 'Pedro', 'CasaPedro');
