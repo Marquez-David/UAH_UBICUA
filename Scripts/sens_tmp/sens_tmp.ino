@@ -1,22 +1,91 @@
-/*
- * OBJ: Script que se encraga de leer los datos de un sensor de temperatura y enciende un LED cuando pasa una cierta temperatura
- * Autor: David Márquez 
- * Version: 1.0.0
- */
 
- int sensor = 0;
- int umbral = 25; //
+//Librerias ESP
 
-//Se hace solo la primera vez
+//#include <ESP8266WIFI.h>
+//#include <WiFiClient.h>
+//#include <ESP8266WebServer.h>
+//#include <ESP8266mDNS.h>
+//#include <SPI.h>
+
+//Configuramos la red y servidor
+//const char* ssid = "SSID"; //SSID del wifi al que nos conectemos
+//const char* password = "contrasenna"; //contrasenna del wifi al que nos conectemos
+//WiFiServer server(80);
+
+//Configuramos LM35
+int outputpin = A0;
+
 void setup() {
   Serial.begin(9600);
-  pinMode(11,OUTPUT);
+  WiFi.begin(ssid, password);
+  Serial.print("Conectandose...");
+  while(WiFi.status() != WL_CONNECTED){
+    delay(500);
+    Serial.print("Aun no se ha conectado");
+    }
+
+    Serial.print("");
+    Serial.print("Ya se ha conectado al wifi con ip: ");
+    Serial.print(WiFi.localIP());
 }
 
-//Se hace todo el rato
 void loop() {
-  int lectura = analogRead(sensor);
-  float volt = 5.0 / 1024 * lectura;
-  float temp = volt * 100 - 50
-
+  int voltaje = analogRead(outputpin);
+  float millivolts = (voltaje / 1024.0) * 3300; //3300 porque es el voltaje que le damos desde el esp
+  float celsius = millivolts / 10;
+  Serial.print("Temperatura en celsius: ");
+  Serial.println(celsius);
 }
+/*
+//Send an HTTP POST request every 10 minutes
+  if ((millis() - lastTime) > timerDelay) {
+    //Check WiFi connection status
+    if(WiFi.status()== WL_CONNECTED){
+      HTTPClient http;
+
+      // Your Domain name with URL path or IP address with path
+      http.begin(serverName);
+
+      // Specify content-type header
+      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      // Prepare your HTTP POST request data
+      String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
+                            + "&location=" + sensorLocation + "&value1=" + String(bme.readTemperature())
+                            + "&value2=" + String(bme.readHumidity()) + "&value3=" + String(bme.readPressure()/100.0F) + "";
+      Serial.print("httpRequestData: ");
+      Serial.println(httpRequestData);
+
+      // You can comment the httpRequestData variable above
+      // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
+      //String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
+
+      // Send HTTP POST request
+      int httpResponseCode = http.POST(httpRequestData);
+
+      // If you need an HTTP request with a content type: text/plain
+      //http.addHeader("Content-Type", "text/plain");
+      //int httpResponseCode = http.POST("Hello, World!");
+
+      // If you need an HTTP request with a content type: application/json, use the following:
+      //http.addHeader("Content-Type", "application/json");
+      //int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
+
+      if (httpResponseCode>0) {
+        Serial.print("HTTP Response code: ");
+        Serial.println(httpResponseCode);
+      }
+      else {
+        Serial.print("Error code: ");
+        Serial.println(httpResponseCode);
+      }
+      // Free resources
+      http.end();
+    }
+    else {
+      Serial.println("WiFi Disconnected");
+    }
+    lastTime = millis();
+  }
+}
+*/
